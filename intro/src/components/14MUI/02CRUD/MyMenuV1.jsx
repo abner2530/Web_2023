@@ -88,7 +88,18 @@ const MyMenuV1 = () => {
                         component={Link}
                         to={"listarAluno"} 
                     >
+
                         <Typography>Listar</Typography>
+                    </MenuItem>
+
+                    {/* Botão para Listar Alunos Aprovados */}
+                    <MenuItem
+                        onClick={handleCloseAlunoMenu}
+                        component={Link}
+                        to={"listarAlunoAprovado"} 
+                    >
+
+                        <Typography>ListarAprovados</Typography>
                     </MenuItem>
                 </Menu>
             </Box>

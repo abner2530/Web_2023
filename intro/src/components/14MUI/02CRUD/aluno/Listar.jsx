@@ -53,7 +53,7 @@ const Listar = () => {
         if (window.confirm("Deseja Excluir? " + id)) {
             axios.delete(`http://localhost:3002/aluno/delete/${id}`)
                 .then(
-                    (response) => { 
+                    (response) => {
                         deleteTeste(id)
                         setMudou(!mudou)
                     }
@@ -71,6 +71,23 @@ const Listar = () => {
         }
         return false
     }
+
+    // Função para calcular a média dos IRAs
+    function calcularMedia() {
+        let somaIra = 0;
+        alunos.forEach((aluno) => {
+            somaIra += aluno.ira;
+        });
+        const media = somaIra / alunos.length;
+        return media.toFixed(2);
+    }
+
+    // Função para filtrar alunos abaixo da média
+    function filtrarAlunosAbaixoDaMedia() {
+        const media = calcularMedia();
+        return alunos.filter((aluno) => aluno.ira < media);
+    }
+
 
     return (
         <>
@@ -94,10 +111,14 @@ const Listar = () => {
                         {
                             alunos.map(
                                 (aluno) => {
+                                    const abaixoDaMedia = aluno.ira < calcularMedia();
                                     return (
-                                        <StyledTableRow key={aluno._id}>
+                                        <StyledTableRow
+                                            key={aluno._id}
+                                            style={{ color: abaixoDaMedia ? "red" : "inherit" }}
+                                        >
                                             <StyledTableCell>{aluno._id}</StyledTableCell>
-                                            <StyledTableCell>{aluno.nome}</StyledTableCell>
+                                            <StyledTableCell style={{ color: abaixoDaMedia ? "red" : "inherit" }}>{aluno.nome}</StyledTableCell>
                                             <StyledTableCell>{aluno.curso}</StyledTableCell>
                                             <StyledTableCell>{aluno.ira}</StyledTableCell>
                                             <StyledTableCell>
@@ -124,7 +145,59 @@ const Listar = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <TableContainer component={Paper} sx={{ mt: 2, mb: 4 }}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>Media da turma</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <StyledTableRow>
+                            <StyledTableCell>{calcularMedia()}</StyledTableCell>
+                        </StyledTableRow>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            <TableContainer component={Paper} sx={{ mt: 2, mb: 4 }}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <StyledTableCell>ID</StyledTableCell>
+                            <StyledTableCell>NOME</StyledTableCell>
+                            <StyledTableCell>CURSO</StyledTableCell>
+                            <StyledTableCell>IRA</StyledTableCell>
+                            <StyledTableCell align="center">AÇÕES</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {/* Alunos abaixo da média */}
+                        <StyledTableRow>
+                            <StyledTableCell colSpan={5} align="center">
+                                <Typography variant="subtitle1" color="error">
+                                    Alunos abaixo da média geral:
+                                </Typography>
+                            </StyledTableCell>
+                        </StyledTableRow>
+                        {filtrarAlunosAbaixoDaMedia().map((aluno) => (
+                            <StyledTableRow
+                                key={aluno._id}
+                                style={{ color: "red" }}
+                            >
+                                <StyledTableCell>{aluno._id}</StyledTableCell>
+                                <StyledTableCell>{aluno.nome}</StyledTableCell>
+                                <StyledTableCell>{aluno.curso}</StyledTableCell>
+                                <StyledTableCell>{aluno.ira}</StyledTableCell>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
         </>
-    )
+    );
 }
+
 export default Listar

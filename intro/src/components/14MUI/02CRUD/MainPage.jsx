@@ -10,6 +10,8 @@ import EditarProfessor from "./professor/Editar"
 import CadastrarAluno from "./aluno/Cadastrar"
 import ListarAluno from "./aluno/Listar"
 import EditarAluno from "./aluno/Editar"
+//página especifica para listar aluno aprovado Questão 2
+import ListarAlunoAprovado from "./aluno/ListarAprovados"
 
 const MainPage = () => {
     return (
@@ -23,6 +25,7 @@ const MainPage = () => {
                     <Route path="cadastrarAluno" element={<CadastrarAluno />}/>
                     <Route path="listarAluno" element={<ListarAluno />}/>
                     <Route path="editarAluno/:id" element={<EditarAluno />}/>
+                    <Route path="listarAlunoAprovado" element={<ListarAlunoAprovado />}/>
                 </Routes>
             </Container>
         </BrowserRouter>
